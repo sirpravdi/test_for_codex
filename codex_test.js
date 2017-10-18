@@ -1,66 +1,95 @@
+
+/** Creates main layout and it's features */
 var createLayout = function() {
 
+  var ctrls = document.createElement('div');
+  ctrls.className = 'controls cbig';
+  var szng = document.createElement('div');
+  szng.className = 'sizing';
+  var sq = document.createElement('div');
+  sq.id = 's_size';
+  sq.className = 'ssize';
+  var vert = document.createElement('div');
+  vert.id = 'v_size';
+  vert.className = 'vsize selected';
+  var hor = document.createElement('div');
+  hor.id = 'h_size';
+  hor.className = 'hsize';
+  var obj = document.createElement('div');
+  obj.className = 'objects';
+  var head = document.createElement('div');
+  head.className = 'hline';
+  head.id = 'head';
+  var mtext = document.createElement('div');
+  mtext.className = 'tline';
+  mtext.id = 'mtext';
+  var image = document.createElement('div');
+  image.className = 'iline';
+  image.id = 'image';
+  var saver = document.createElement('div');
+  saver.className = 'sline';
+  saver.id = 'saver';
+  var edt = document.createElement('div');
+  edt.className = 'vertical';
+  edt.id = 'editor';
+
+
+/** 
+  * Creates Layout in div provided by user
+  * @param {string} id - The id of the div for layout inserting.
+  */
   var createHtmlLayout = function(id) {
-    var basicHtml = '<div class="controls cbig">' +
-      '<div class="sizing">' +
-      '<div id="s_size" class="ssize"></div>' +
-      '<div id="v_size" class="vsize selected"></div>' +
-      '<div id="h_size" class="hsize"></div>' +
-      '</div>' +
-      '<div class="objects">' +
-      '<div id="head" class="hline">Headline</div>' +
-      '<div id="mtext" class="tline">Main Text</div>' +
-      '<div id="image" class="iline">Image</div>' +
-      '<div id="saver" class="sline"></div>' +
-      '</div>' +
-      '</div>' +
-      '<div id="editor" class="vertical"></div>';
     var div = document.getElementById(id);
-    div.innerHTML = basicHtml;
+    div.appendChild(ctrls);
+    div.appendChild(edt);
+    ctrls.appendChild(szng);
+    ctrls.appendChild(obj);
+    szng.appendChild(sq);
+    szng.appendChild(vert);
+    szng.appendChild(hor);
+    obj.appendChild(head);
+    obj.appendChild(mtext);
+    obj.appendChild(image);
+    obj.appendChild(saver);
+
   };
 
-
+  /** 
+  * Changes editor size after pressing sizing buttons
+  */
   var sizeChange = function() {
     var prev = document.getElementsByClassName('selected');
     prev[0].classList.remove('selected');
     this.classList.add('selected');
 	
-    var box = document.getElementById('editor');
-    var ctrls = document.getElementsByClassName('controls');
     if (this.id == 'v_size') {
-      box.classList.remove('square', 'horizontal');
-      box.classList.add('vertical');
-      ctrls[0].classList.add('cbig');
-      ctrls[0].classList.remove('csmall');
+      edt.classList.remove('square', 'horizontal');
+      edt.classList.add('vertical');
+      ctrls.classList.add('cbig');
+      ctrls.classList.remove('csmall');
     } else if (this.id == 'h_size') {
-      box.classList.remove('square', 'vertical');
-      box.classList.add('horizontal');
-      ctrls[0].classList.add('csmall');
-      ctrls[0].classList.remove('cbig');
+      edt.classList.remove('square', 'vertical');
+      edt.classList.add('horizontal');
+      ctrls.classList.add('csmall');
+      ctrls.classList.remove('cbig');
     } else {
-      box.classList.remove('horizontal', 'vertical');
-      box.classList.add('square');
-      ctrls[0].classList.add('csmall');
-      ctrls[0].classList.remove('cbig');
+      edt.classList.remove('horizontal', 'vertical');
+      edt.classList.add('square');
+      ctrls.classList.add('csmall');
+      ctrls.classList.remove('cbig');
     }
   }
-
+  
+  /** 
+  * Creates features for the layout
+  */
   var createFeatures = function() {
-
-    var sq = document.getElementById("s_size"),
-      vert = document.getElementById('v_size'),
-      hor = document.getElementById('h_size'),
-      head = document.getElementById('head'),
-      mtext = document.getElementById('mtext'),
-      image = document.getElementById('image'),
-      saver = document.getElementById('saver');
 
     sq.addEventListener('click', sizeChange);
     vert.addEventListener('click', sizeChange);
     hor.addEventListener('click', sizeChange);
 
     var wrap = document.getElementById('wrapper');
-    var edt = document.getElementById('editor');
 
     wrap.addEventListener('click', function(e) {
       if (e.target != document.getElementById('headline')) {

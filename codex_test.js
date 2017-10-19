@@ -64,7 +64,7 @@ var createLayout = function() {
     var prev = document.getElementsByClassName('selected');
     prev[0].classList.remove('selected');
     this.classList.add('selected');
-	
+
     if (this.id == 'v_size') {
       edt.classList.remove('square', 'horizontal');
       edt.classList.add('vertical');
@@ -81,7 +81,99 @@ var createLayout = function() {
       ctrls.classList.add('csmall');
       ctrls.classList.remove('cbig');
     }
-  }
+  };
+
+  /** 
+  * Call on wrap.click event; Specify events for wrap clicks
+  */
+  var wrapEvents = function(e) {
+    var wrap = document.getElementById('wrapper');
+    if ((e.target != document.getElementById('headline'))&&document.getElementById('headline')) {
+      document.getElementById('headline').classList.remove('hclicked');
+    }
+    if (document.getElementsByClassName('colorPick').length) {
+      var cp = document.getElementsByClassName('colorPick'),
+      ci = document.getElementsByClassName('cinp'),
+      ct = document.getElementsByClassName('ctext');
+      if ((e.target !== wrap) && (e.target !== edt) && ((e.target == cp[0]) || (e.target == ci[0]) || (e.target == ct[0])))
+        return;
+      edt.removeChild(cp[0]);
+    } else {
+      if (e.target !== edt)
+        return;
+      if (head.classList.contains('pressed') || mtext.classList.contains('pressed') || image.classList.contains('pressed'))
+        return;
+      var colorPick = document.createElement('div');
+      colorPick.className = 'colorPick';
+      edt.appendChild(colorPick);
+      var cinp = document.createElement('div');
+      var ctext = document.createElement('input');
+      ctext.type = 'input';
+      cinp.className = 'cinp';
+      ctext.className = 'ctext';
+      ctext.classList.add('black-border');
+      colorPick.appendChild(ctext);
+      colorPick.appendChild(cinp);
+      ctext.oninput = function() {
+        var color = /#[a-f0-9]{6}\b/gi;
+        if (color.test(ctext.value)) {
+          ctext.classList.remove('red-border');
+          ctext.classList.add('black-border');
+          cinp.style.background = ctext.value;
+          edt.style.background = ctext.value;
+        } else {
+          ctext.classList.add('red-border');
+          ctext.classList.remove('black-border');
+        }
+      };
+    }
+  };
+
+  var headClick = function(){
+    if (head.classList.contains('pressed')) {
+      head.classList.remove('pressed');
+      headline.classList.remove('hclicked');
+    } else {
+      head.classList.add('pressed');
+      mtext.classList.remove('pressed');
+      image.classList.remove('pressed');
+      if (!document.getElementById('headline')) {
+        headline = document.createElement('div');
+        htools = document.createElement('div');
+        htools.id = "htools";
+        headline.id = "headline";
+        headline.contentEditable = "true";
+
+        edt.appendChild(headline);
+        edt.appendChild(htools);
+        headline.addEventListener('click', function() {
+          headline.classList.add('hclicked');
+        });
+      }
+    }
+  };
+
+
+  var textClick = function(){
+    if (mtext.classList.contains('pressed')) {
+      mtext.classList.remove('pressed');
+    } else {
+      mtext.classList.add('pressed');
+      head.classList.remove('pressed');
+      image.classList.remove('pressed');
+    }
+  };
+
+
+  var imageClick = function(){
+    if (image.classList.contains('pressed')) {
+      image.classList.remove('pressed');
+    } else {
+      image.classList.add('pressed');
+      mtext.classList.remove('pressed');
+      head.classList.remove('pressed');
+    }
+  };
   
   /** 
   * Creates features for the layout
@@ -93,96 +185,12 @@ var createLayout = function() {
     hor.addEventListener('click', sizeChange);
 
     var wrap = document.getElementById('wrapper');
-
-    wrap.addEventListener('click', function(e) {
-
-      if ((e.target != document.getElementById('headline'))&&document.getElementById('headline')) {
-        document.getElementById('headline').classList.remove('hclicked');
-      }
-      if (document.getElementsByClassName('colorPick').length) {
-        var cp = document.getElementsByClassName('colorPick'),
-          ci = document.getElementsByClassName('cinp'),
-          ct = document.getElementsByClassName('ctext');
-        if ((e.target !== wrap) && (e.target !== edt) && ((e.target == cp[0]) || (e.target == ci[0]) || (e.target == ct[0])))
-          return;
-        edt.removeChild(cp[0]);
-      } else {
-        if (e.target !== edt)
-          return;
-        if (head.classList.contains('pressed') || mtext.classList.contains('pressed') || image.classList.contains('pressed'))
-          return;
-        var colorPick = document.createElement('div');
-        colorPick.className = 'colorPick';
-        edt.appendChild(colorPick);
-        var cinp = document.createElement('div');
-        var ctext = document.createElement('input');
-        ctext.type = 'input';
-        cinp.className = 'cinp';
-        ctext.className = 'ctext';
-        ctext.classList.add('black-border');
-        colorPick.appendChild(ctext);
-        colorPick.appendChild(cinp);
-        ctext.oninput = function() {
-          var color = /#[a-f0-9]{6}\b/gi;
-          if (color.test(ctext.value)) {
-            ctext.classList.remove('red-border');
-            ctext.classList.add('black-border');
-            cinp.style.background = ctext.value;
-            edt.style.background = ctext.value;
-          } else {
-            ctext.classList.add('red-border');
-            ctext.classList.remove('black-border');
-          }
-        };
-      }
-    });
+    wrap.addEventListener('click', wrapEvents);
 
 
-    head.addEventListener('click', function() {
-      if (head.classList.contains('pressed')) {
-        head.classList.remove('pressed');
-        headline.classList.remove('hclicked');
-      } else {
-        head.classList.add('pressed');
-        mtext.classList.remove('pressed');
-        image.classList.remove('pressed');
-        if (!document.getElementById('headline')) {
-          headline = document.createElement('div');
-          htools = document.createElement('div');
-          htools.id = "htools";
-          headline.id = "headline";
-          headline.contentEditable = "true";
-
-          edt.appendChild(headline);
-          edt.appendChild(htools);
-          headline.addEventListener('click', function() {
-            headline.classList.add('hclicked');
-          });
-        }
-      }
-    });
-
-
-    mtext.addEventListener('click', function() {
-      if (mtext.classList.contains('pressed')) {
-        mtext.classList.remove('pressed');
-      } else {
-        mtext.classList.add('pressed');
-        head.classList.remove('pressed');
-        image.classList.remove('pressed');
-      }
-    });
-
-
-    image.addEventListener('click', function() {
-      if (image.classList.contains('pressed')) {
-        image.classList.remove('pressed');
-      } else {
-        image.classList.add('pressed');
-        mtext.classList.remove('pressed');
-        head.classList.remove('pressed');
-      }
-    });
+    head.addEventListener('click', headClick);
+    mtext.addEventListener('click',textClick);
+    image.addEventListener('click', imageClick);
   };
 
   var init = function(id) {

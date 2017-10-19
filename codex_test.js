@@ -20,12 +20,15 @@ var createLayout = function() {
   var head = document.createElement('div');
   head.className = 'hline';
   head.id = 'head';
+  head.textContent = 'Headline';
   var mtext = document.createElement('div');
   mtext.className = 'tline';
   mtext.id = 'mtext';
+  mtext.textContent = 'Main Text';
   var image = document.createElement('div');
   image.className = 'iline';
   image.id = 'image';
+  image.textContent = 'Image';
   var saver = document.createElement('div');
   saver.className = 'sline';
   saver.id = 'saver';
@@ -92,7 +95,8 @@ var createLayout = function() {
     var wrap = document.getElementById('wrapper');
 
     wrap.addEventListener('click', function(e) {
-      if (e.target != document.getElementById('headline')) {
+
+      if ((e.target != document.getElementById('headline'))&&document.getElementById('headline')) {
         document.getElementById('headline').classList.remove('hclicked');
       }
       if (document.getElementsByClassName('colorPick').length) {

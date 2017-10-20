@@ -196,6 +196,14 @@ var createLayout = function() {
       head.classList.remove('pressed');
     }
   };
+
+  var uploadFile = function(){
+    var file = document.getElementById('saver').files[0];
+    var  allowedTypes = ['image/png', 'image/jpeg'];
+    if (allowedTypes.indexOf(file.type) != -1) {
+      console.log('allowed');
+    }
+  };
   
   /** 
   * Creates features for the layout
@@ -209,6 +217,7 @@ var createLayout = function() {
     var wrap = document.getElementById('wrapper');
     wrap.addEventListener('click', wrapEvents);
 
+    saver.addEventListener('change', uploadFile);
 
     head.addEventListener('click', headClick);
     mtext.addEventListener('click',textClick);

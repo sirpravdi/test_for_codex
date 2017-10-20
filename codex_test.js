@@ -29,9 +29,17 @@ var createLayout = function() {
   image.className = 'iline';
   image.id = 'image';
   image.textContent = 'Image';
-  var saver = document.createElement('div');
+  
+  var slabel = document.createElement('label')
+  slabel.className = 'sline';
+  var saver = document.createElement('input');
   saver.className = 'sline';
   saver.id = 'saver';
+  saver.type = 'file';
+
+
+
+
   var edt = document.createElement('div');
   edt.className = 'vertical';
   edt.id = 'editor';
@@ -53,7 +61,8 @@ var createLayout = function() {
     obj.appendChild(head);
     obj.appendChild(mtext);
     obj.appendChild(image);
-    obj.appendChild(saver);
+    obj.appendChild(slabel);
+    slabel.appendChild(saver);
 
   };
 
@@ -88,21 +97,27 @@ var createLayout = function() {
   */
   var wrapEvents = function(e) {
     var wrap = document.getElementById('wrapper');
+
     if ((e.target != document.getElementById('headline'))&&document.getElementById('headline')) {
       document.getElementById('headline').classList.remove('hclicked');
     }
+
     if (document.getElementsByClassName('colorPick').length) {
       var cp = document.getElementsByClassName('colorPick'),
       ci = document.getElementsByClassName('cinp'),
       ct = document.getElementsByClassName('ctext');
+
       if ((e.target !== wrap) && (e.target !== edt) && ((e.target == cp[0]) || (e.target == ci[0]) || (e.target == ct[0])))
         return;
       edt.removeChild(cp[0]);
-    } else {
+    } 
+    else {
       if (e.target !== edt)
         return;
+
       if (head.classList.contains('pressed') || mtext.classList.contains('pressed') || image.classList.contains('pressed'))
         return;
+
       var colorPick = document.createElement('div');
       colorPick.className = 'colorPick';
       edt.appendChild(colorPick);
@@ -129,6 +144,9 @@ var createLayout = function() {
     }
   };
 
+  /** 
+  * Call on head.click event
+  */
   var headClick = function(){
     if (head.classList.contains('pressed')) {
       head.classList.remove('pressed');
@@ -153,7 +171,9 @@ var createLayout = function() {
     }
   };
 
-
+  /** 
+  * Call on text.click event; Specify events for wrap clicks
+  */
   var textClick = function(){
     if (mtext.classList.contains('pressed')) {
       mtext.classList.remove('pressed');
@@ -164,7 +184,9 @@ var createLayout = function() {
     }
   };
 
-
+  /** 
+  * Call on image.click event; Specify events for wrap clicks
+  */
   var imageClick = function(){
     if (image.classList.contains('pressed')) {
       image.classList.remove('pressed');

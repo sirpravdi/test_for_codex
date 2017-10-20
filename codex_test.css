@@ -178,3 +178,9 @@
 div.hclicked + #htools {
   opacity: 1;
 }
+
+[type=file] {
+    position: absolute;
+    filter: alpha(opacity=0);
+    opacity: 0;
+}

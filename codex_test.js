@@ -25,21 +25,16 @@ var createLayout = function() {
   mtext.className = 'tline';
   mtext.id = 'mtext';
   mtext.textContent = 'Main Text';
-  var image = document.createElement('div');
+  var ilabel = document.createElement('label');
+  ilabel.className = 'iline';
+  ilabel.textContent = 'Image';
+  var image = document.createElement('input');
   image.className = 'iline';
   image.id = 'image';
-  image.textContent = 'Image';
-  
-  var slabel = document.createElement('label')
-  slabel.className = 'sline';
-  var saver = document.createElement('input');
+  image.type = 'file';
+  var saver = document.createElement('div');
   saver.className = 'sline';
   saver.id = 'saver';
-  saver.type = 'file';
-
-
-
-
   var edt = document.createElement('div');
   edt.className = 'vertical';
   edt.id = 'editor';
@@ -60,10 +55,9 @@ var createLayout = function() {
     szng.appendChild(hor);
     obj.appendChild(head);
     obj.appendChild(mtext);
-    obj.appendChild(image);
-    obj.appendChild(slabel);
-    slabel.appendChild(saver);
-
+    obj.appendChild(ilabel);
+    ilabel.appendChild(image);
+    obj.appendChild(saver);
   };
 
   /** 
@@ -115,8 +109,8 @@ var createLayout = function() {
       if (e.target !== edt)
         return;
 
-      if (head.classList.contains('pressed') || mtext.classList.contains('pressed') || image.classList.contains('pressed'))
-        return;
+      //if (head.classList.contains('pressed') || mtext.classList.contains('pressed') || image.classList.contains('pressed'))
+        //return;
 
       var colorPick = document.createElement('div');
       colorPick.className = 'colorPick';
@@ -148,13 +142,8 @@ var createLayout = function() {
   * Call on head.click event
   */
   var headClick = function(){
-    if (head.classList.contains('pressed')) {
-      head.classList.remove('pressed');
-      headline.classList.remove('hclicked');
-    } else {
+    if (!head.classList.contains('pressed')) {
       head.classList.add('pressed');
-      mtext.classList.remove('pressed');
-      image.classList.remove('pressed');
       if (!document.getElementById('headline')) {
         headline = document.createElement('div');
         htools = document.createElement('div');
@@ -175,33 +164,22 @@ var createLayout = function() {
   * Call on text.click event; Specify events for wrap clicks
   */
   var textClick = function(){
-    if (mtext.classList.contains('pressed')) {
-      mtext.classList.remove('pressed');
-    } else {
+    if (!mtext.classList.contains('pressed')) {
       mtext.classList.add('pressed');
-      head.classList.remove('pressed');
-      image.classList.remove('pressed');
     }
   };
 
   /** 
-  * Call on image.click event; Specify events for wrap clicks
+  * Call on image.change event; Specify events for wrap clicks
   */
-  var imageClick = function(){
-    if (image.classList.contains('pressed')) {
-      image.classList.remove('pressed');
-    } else {
-      image.classList.add('pressed');
-      mtext.classList.remove('pressed');
-      head.classList.remove('pressed');
-    }
-  };
-
   var uploadFile = function(){
-    var file = document.getElementById('saver').files[0];
-    var  allowedTypes = ['image/png', 'image/jpeg'];
-    if (allowedTypes.indexOf(file.type) != -1) {
-      console.log('allowed');
+    if (!ilabel.classList.contains('pressed')) {
+      ilabel.classList.add('pressed');
+      var file = document.getElementById('image').files[0];
+      var allowedTypes = ['image/png', 'image/jpeg'];
+      if (allowedTypes.indexOf(file.type) != -1) {
+        console.log('allowed');
+      }
     }
   };
   
@@ -217,11 +195,12 @@ var createLayout = function() {
     var wrap = document.getElementById('wrapper');
     wrap.addEventListener('click', wrapEvents);
 
-    saver.addEventListener('change', uploadFile);
+    //saver.addEventListener('change', uploadFile);
 
     head.addEventListener('click', headClick);
     mtext.addEventListener('click',textClick);
-    image.addEventListener('click', imageClick);
+    image.addEventListener('change', uploadFile);
+
   };
 
   var init = function(id) {

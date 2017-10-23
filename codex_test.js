@@ -32,6 +32,7 @@ var createLayout = function() {
   image.className = 'iline';
   image.id = 'image';
   image.type = 'file';
+  image.accept = 'image/*';
   var saver = document.createElement('div');
   saver.className = 'sline';
   saver.id = 'saver';
@@ -92,7 +93,7 @@ var createLayout = function() {
   var wrapEvents = function(e) {
     var wrap = document.getElementById('wrapper');
 
-    if ((e.target != document.getElementById('headline'))&&document.getElementById('headline')) {
+    if ((e.target != document.getElementById('headline'))&&(e.target != document.getElementById('htools'))&&document.getElementById('headline')) {
       document.getElementById('headline').classList.remove('hclicked');
     }
 
@@ -175,11 +176,13 @@ var createLayout = function() {
   var uploadFile = function(){
     if (!ilabel.classList.contains('pressed')) {
       ilabel.classList.add('pressed');
-      var file = document.getElementById('image').files[0];
-      var allowedTypes = ['image/png', 'image/jpeg'];
-      if (allowedTypes.indexOf(file.type) != -1) {
-        console.log('allowed');
-      }
+      var pic = document.getElementById('image').files[0];
+      src = URL.createObjectURL(pic);
+      imagebox = document.createElement('img');
+      imagebox.id = 'imagebox';
+      imagebox.src =  src;
+      edt.appendChild(imagebox);
+
     }
   };
   
